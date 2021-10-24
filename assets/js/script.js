@@ -14,33 +14,12 @@ var formSubmitHandler = function (event) {
     getCity();
 };
 
-// GET AFFIRMATION
-var getAffirmation = function () {
-    var affirmUrl = "https://www.affirmations.dev";
-    // make fetch request
-    fetch(affirmUrl).then(function (response) {
-        // if request successful
-        if (response.ok) {
-            // get data from response
-            console.log(response);
-            response.json().then(function (data) {
-                console.log(data);
-                // console log affirmation
-                console.log(data.affirmation);
-                //declare element for affirmation and add it to page
-            });
-        } else {
-            alert("Error getting api response");
-        };
-    });
-};
-
 // GET HOROSCOPE
 
 var getHoroscope = function() {
-    var horoUrl = "https://aztro.sameerkumar.website?sign=" + sign + "&day=" + day;
-    // make fetch request
-    fetch(horoUrl).then(function (response) {
+    var horoUrl = "https://api.nytimes.com/svc/books/v3/lists.json";    // make fetch request
+    fetch(horoUrl)
+    .then(function (response) {
         // if request successful
         if (response.ok) {
             // get data from response
@@ -48,7 +27,7 @@ var getHoroscope = function() {
             response.json().then(function (data) {
                 console.log(data);
                 // console log
-                console.log();
+
                 //declare element add it to page
             });
         } else {
@@ -57,8 +36,8 @@ var getHoroscope = function() {
     });
 }
 
+
 // CALL FUNCTIONS
-getAffirmation();
 getHoroscope();
 // SUBMIT CITY EVENT LISTENER
 formEl.addEventListener("submit", formSubmitHandler);
