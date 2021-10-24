@@ -2,8 +2,8 @@
 var formEl = document.querySelector(".city-form");
 var inputEl = document.querySelector("#city");
 //example vars
-var sign = "leo";
-var day = "today";
+var search = "harry potter";
+var search2;
 // FORM SUBMIT HANDLER
 var formSubmitHandler = function (event) {
     // prevent page from reloading
@@ -16,9 +16,10 @@ var formSubmitHandler = function (event) {
 
 // GET AFFIRMATION
 var getAffirmation = function () {
-    var affirmUrl = "https://www.affirmations.dev";
+    var url2 = "http://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
+
     // make fetch request
-    fetch(affirmUrl).then(function (response) {
+    fetch(url2).then(function (response) {
         // if request successful
         if (response.ok) {
             // get data from response
@@ -37,10 +38,11 @@ var getAffirmation = function () {
 
 // GET HOROSCOPE
 
-var getHoroscope = function() {
-    var horoUrl = "https://aztro.sameerkumar.website?sign=" + sign + "&day=" + day;
+var getHoroscope = function () {
+    var url = "https://www.googleapis.com/books/v1/volumes?q=" + search + "&key=AIzaSyDHFrhaSZyG8xtzgAEnpoZ8Rh5zLZ-D0RU";
+
     // make fetch request
-    fetch(horoUrl).then(function (response) {
+    fetch(url).then(function (response) {
         // if request successful
         if (response.ok) {
             // get data from response
