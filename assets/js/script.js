@@ -2,8 +2,8 @@
 var formEl = document.querySelector(".city-form");
 var inputEl = document.querySelector("#city");
 //example vars
-var sign = "leo";
-var day = "today";
+var search = "harry potter";
+var search2;
 // FORM SUBMIT HANDLER
 var formSubmitHandler = function (event) {
     // prevent page from reloading
@@ -14,12 +14,35 @@ var formSubmitHandler = function (event) {
     getCity();
 };
 
+// GET AFFIRMATION
+var getMovie = function () {
+    var url2 = "http://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
+
+    // make fetch request
+    fetch(url2).then(function (response) {
+        // if request successful
+        if (response.ok) {
+            // get data from response
+            console.log(response);
+            response.json().then(function (data) {
+                console.log(data);
+                // console log affirmation
+                console.log(data.affirmation);
+                //declare element for affirmation and add it to page
+            });
+        } else {
+            alert("Error getting api response");
+        };
+    });
+};
+
 // GET HOROSCOPE
 
-var getHoroscope = function() {
-    var horoUrl = "https://api.nytimes.com/svc/books/v3/lists.json";    // make fetch request
-    fetch(horoUrl)
-    .then(function (response) {
+var getBook = function () {
+    var url = "https://www.googleapis.com/books/v1/volumes?q=" + search + "&key=AIzaSyDHFrhaSZyG8xtzgAEnpoZ8Rh5zLZ-D0RU";
+
+    // make fetch request
+    fetch(url).then(function (response) {
         // if request successful
         if (response.ok) {
             // get data from response
@@ -38,6 +61,9 @@ var getHoroscope = function() {
 
 
 // CALL FUNCTIONS
-getHoroscope();
+getMovie();
+getBook();
 // SUBMIT CITY EVENT LISTENER
 formEl.addEventListener("submit", formSubmitHandler);
+
+//log titles, images, descriptions
