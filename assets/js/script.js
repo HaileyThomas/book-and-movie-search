@@ -7,6 +7,8 @@ var search;
 var movieTitle = [];
 var movieDate = [];
 var moviePoster = [];
+var movieID = [];
+var moviePlot = [];
 //book data
 var bookTitle = [];
 var bookDate = [];
@@ -101,13 +103,12 @@ var getBook = function () {
                     bookDateEl.className = "card-content has-text-centered p-2";
                     bookDateEl.textContent = "Release date: " + bookDate[i];
                     bookContentDiv.appendChild(bookDateEl);
-                    // add book description
-                    /*
+                    // add book description         
                     var bookDescriptionEl = document.createElement("p");
                     bookDescriptionEl.className = "card-content has-text-justified";
                     bookDescriptionEl.textContent = bookDesc[i];
                     bookContentDiv.appendChild(bookDescriptionEl);
-                    */
+                    
                 };
 
             });
@@ -132,16 +133,37 @@ var getMovie = function () {
                 //log data for 5 movies using for loop
                 for (i = 0; i < 5; i++) {
                     //movie title
-                    movieTitle[i] = data.Search[i].Title
+                    movieTitle[i] = data.Search[i].Title;
                     console.log("Title: " + movieTitle[i]);
 
                     //year released
-                    movieDate[i] = data.Search[i].Year
+                    movieDate[i] = data.Search[i].Year;
                     console.log("Year: " + movieDate[i]);
 
                     //image of the poster
-                    moviePoster[i] = data.Search[i].Poster
+                    moviePoster[i] = data.Search[i].Poster;
                     console.log("Poster: " + moviePoster[i]);
+                    //use movie id as a parameter to fetch api and get plot
+                    movieID[i] = data.Search[i].imdbID;
+                    console.log("Movie ID: " + movieID[i]);
+
+                    //api with added parameters for id which will give us data on THE specific movie
+                     var movieIDUrl = "http://www.omdbapi.com/?i=" + movieID[i] + "&apikey=5bdbab43&";
+                        fetch(movieIDUrl).then(function (response2){
+                        if(response2.ok) {
+                          response2.json().then(function (data2) {
+                             //assign current plot to array
+                                  moviePlot[i] = data2.Plot;
+                                  //log to make sure plot is saved
+                                  console.log("Plot: " + moviePlot[i]);
+                                  ////////
+                                  //HERE IS THE PROBLEM
+                                  //I CAN GET moviePlot[i] to console log but it
+                                  //will remain undefined and won't be added to the page
+                                  //even though i assign it to the array index above
+                             });
+                        }
+                    });                    
                 }
                 //side note for grabbing movie data
                 //REMEMBER TO USE CAPITALS
@@ -178,20 +200,19 @@ var getMovie = function () {
                     // add movie poster
                     var movieImageDiv = document.createElement("img");
                     movieImageDiv.className = "card-image has-text-centered m-3";
-                    movieImageDiv.src = moviePoster;
+                    movieImageDiv.src = moviePoster[i];
                     movieContentDiv.appendChild(movieImageDiv);
                     // add movie date
                     var movieDateEl = document.createElement("h4");
                     movieDateEl.className = "card-content has-text-centered p-2";
                     movieDateEl.textContent = "Release date: " + movieDate[i];
                     movieContentDiv.appendChild(movieDateEl);
-                    // add movie description
-                    /*
+                    // add movie description       
                     var movieDescriptionEl = document.createElement("p");
                     movieDescriptionEl.className = "card-content has-text-justified";
-                    movieDescriptionEl.textContent = movieDesc[i];
+                    movieDescriptionEl.textContent = "Plot: " + moviePlot[i];
                     movieContentDiv.appendChild(movieDescriptionEl);
-                    */
+                    
                 };
 
             });
