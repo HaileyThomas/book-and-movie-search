@@ -4,12 +4,14 @@ var inputEl = document.querySelector("#title");
 var resultsContainer = document.getElementById("results-container");
 var search;
 //movie data
+var movieContainer;
 var movieTitle = [];
 var movieDate = [];
 var moviePoster = [];
 var movieID = [];
 var moviePlot = [];
 //book data
+var bookContainer;
 var bookTitle = [];
 var bookDate = [];
 var bookDesc = [];
@@ -22,6 +24,26 @@ var bookThumbnail = [];
 var formSubmitHandler = function (event) {
     // prevent page from reloading
     event.preventDefault();
+    // check to see if there is already book results
+    if (bookContainer) {
+        // give name to state of element
+        var state1 = bookContainer.getAttribute("data-state");
+        // check to see if it is visible on the page
+        if (state1 === "visible") {
+            // remove div
+            bookContainer.remove();
+        }
+    };
+    // check to see if there is already movie results
+    if (movieContainer) {
+        // give name to state of element
+        var state2 = movieContainer.getAttribute("data-state");
+        // check to see if it is visible on the page
+        if (state2 === "visible") {
+            // remove div
+            movieContainer.remove();
+        }
+    };
     // get value from input element
     search = inputEl.value.trim();
     // run get city function
@@ -66,8 +88,9 @@ var getBook = function () {
 
                 //declare element add it to page
                 // create book container
-                var bookContainer = document.createElement("div");
-                bookContainer.className = "card m-3";
+                bookContainer = document.createElement("div");
+                bookContainer.className = "column is-half card m-3";
+                bookContainer.setAttribute("data-state", "visible");
                 resultsContainer.appendChild(bookContainer);
                 // create book container heading
                 var bookHeader = document.createElement("h2");
@@ -137,8 +160,9 @@ var getMovie = function () {
                     console.log("Movie ID: " + movieID[i]);
                 }
                 // create movie container div
-                var movieContainer = document.createElement("div");
-                movieContainer.className = "card m-3";
+                movieContainer = document.createElement("div");
+                movieContainer.className = "column is-half card m-3";
+                movieContainer.setAttribute("data-state", "visible");
                 resultsContainer.appendChild(movieContainer);
                 // create movie container heading
                 var movieHeader = document.createElement("h2");
