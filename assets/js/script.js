@@ -16,6 +16,9 @@ var bookTitle = [];
 var bookDate = [];
 var bookDesc = [];
 var bookThumbnail = [];
+//local storage history
+var historyEl = JSON.parse(window.localStorage.getItem("searchHistory")) || [];
+var searchCount = 0;
 
 //we use arrays for data because there are 5 items we want to store specific data for
 //ex. 5 book titles
@@ -46,6 +49,15 @@ var formSubmitHandler = function (event) {
     };
     // get value from input element
     search = inputEl.value.trim();
+
+    //history array
+    console.log(historyEl);
+    historyEl.push(search);
+    //only allow up to 5 searches
+    historyEl.splice(5);
+    //store to local storage
+    localStorage.setItem("searchHistory", JSON.stringify(historyEl));
+    console.log(localStorage.getItem("searchHistory", JSON.stringify(historyEl)));
     // run get city function
     getBook();
     getMovie();
