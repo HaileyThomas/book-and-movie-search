@@ -143,7 +143,7 @@ var getBook = function () {
 
 // GET MOVIE
 var getMovie = function () {
-    var movieUrl = "http://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
+    var movieUrl = "https://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
 
     // make fetch request
     fetch(movieUrl).then(function (response) {
@@ -176,7 +176,7 @@ var getMovie = function () {
                 // loop through movie id's
                 for (i = 0; i < movieID.length; i++) {
                     //api with added parameters for id which will give us data on THE specific movie
-                    var movieIDUrl = "http://www.omdbapi.com/?i=" + movieID[i] + "&apikey=5bdbab43&";
+                    var movieIDUrl = "https://www.omdbapi.com/?i=" + movieID[i] + "&apikey=5bdbab43&";
                     fetch(movieIDUrl).then(function (response2) {
                         if (response2.ok) {
                             response2.json().then(function (data2) {
