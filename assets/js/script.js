@@ -4,12 +4,14 @@ var inputEl = document.querySelector("#title");
 var resultsContainer = document.getElementById("results-container");
 var search;
 //movie data
+var movieContainer;
 var movieTitle = [];
 var movieDate = [];
 var moviePoster = [];
 var movieID = [];
 var moviePlot = [];
 //book data
+var bookContainer;
 var bookTitle = [];
 var bookDate = [];
 var bookDesc = [];
@@ -22,6 +24,26 @@ var bookThumbnail = [];
 var formSubmitHandler = function (event) {
     // prevent page from reloading
     event.preventDefault();
+    // check to see if there is already book results
+    if (bookContainer) {
+        // give name to state of element
+        var state1 = bookContainer.getAttribute("data-state");
+        // check to see if it is visible on the page
+        if (state1 === "visible") {
+            // remove div
+            bookContainer.remove();
+        }
+    };
+    // check to see if there is already movie results
+    if (movieContainer) {
+        // give name to state of element
+        var state2 = movieContainer.getAttribute("data-state");
+        // check to see if it is visible on the page
+        if (state2 === "visible") {
+            // remove div
+            movieContainer.remove();
+        }
+    };
     // get value from input element
     search = inputEl.value.trim();
     // run get city function
@@ -66,8 +88,9 @@ var getBook = function () {
 
                 //declare element add it to page
                 // create book container
-                var bookContainer = document.createElement("div");
-                bookContainer.className = "card m-3";
+                bookContainer = document.createElement("div");
+                bookContainer.className = "column is-half card m-3";
+                bookContainer.setAttribute("data-state", "visible");
                 resultsContainer.appendChild(bookContainer);
                 // create book container heading
                 var bookHeader = document.createElement("h2");
@@ -108,7 +131,6 @@ var getBook = function () {
                     bookDescriptionEl.className = "card-content has-text-justified";
                     bookDescriptionEl.textContent = bookDesc[i];
                     bookContentDiv.appendChild(bookDescriptionEl);
-                    
                 };
 
             });
@@ -120,7 +142,7 @@ var getBook = function () {
 
 // GET MOVIE
 var getMovie = function () {
-    var movieUrl = "http://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
+    var movieUrl = "https://www.omdbapi.com/?s=" + search + "&apikey=5bdbab43&";
 
     // make fetch request
     fetch(movieUrl).then(function (response) {
@@ -132,46 +154,14 @@ var getMovie = function () {
                 console.log(data);
                 //log data for 5 movies using for loop
                 for (i = 0; i < 5; i++) {
-                    //movie title
-                    movieTitle[i] = data.Search[i].Title;
-                    console.log("Title: " + movieTitle[i]);
-
-                    //year released
-                    movieDate[i] = data.Search[i].Year;
-                    console.log("Year: " + movieDate[i]);
-
-                    //image of the poster
-                    moviePoster[i] = data.Search[i].Poster;
-                    console.log("Poster: " + moviePoster[i]);
-                    //use movie id as a parameter to fetch api and get plot
+                    //use movie id as a parameter to fetch api and get data
                     movieID[i] = data.Search[i].imdbID;
                     console.log("Movie ID: " + movieID[i]);
-
-                    //api with added parameters for id which will give us data on THE specific movie
-                     var movieIDUrl = "http://www.omdbapi.com/?i=" + movieID[i] + "&apikey=5bdbab43&";
-                        fetch(movieIDUrl).then(function (response2){
-                        if(response2.ok) {
-                          response2.json().then(function (data2) {
-                             //assign current plot to array
-                                  moviePlot[i] = data2.Plot;
-                                  //log to make sure plot is saved
-                                  console.log("Plot: " + moviePlot[i]);
-                                  ////////
-                                  //HERE IS THE PROBLEM
-                                  //I CAN GET moviePlot[i] to console log but it
-                                  //will remain undefined and won't be added to the page
-                                  //even though i assign it to the array index above
-                             });
-                        }
-                    });                    
                 }
-                //side note for grabbing movie data
-                //REMEMBER TO USE CAPITALS
-                //ex. data.Search[0].Title
-
                 // create movie container div
-                var movieContainer = document.createElement("div");
-                movieContainer.className = "card m-3";
+                movieContainer = document.createElement("div");
+                movieContainer.className = "column is-half card m-3";
+                movieContainer.setAttribute("data-state", "visible");
                 resultsContainer.appendChild(movieContainer);
                 // create movie container heading
                 var movieHeader = document.createElement("h2");
@@ -182,46 +172,62 @@ var getMovie = function () {
                 var movieResultsDiv = document.createElement("div");
                 movieResultsDiv.className = "card-content";
                 movieContainer.appendChild(movieResultsDiv);
-                // loop through movie results
-                for (i = 0; i < movieTitle.length; i++) {
-                    // create card div
-                    var movieDivEl = document.createElement("div");
-                    movieDivEl.className = "card m-2";
-                    movieResultsDiv.appendChild(movieDivEl);
-                    // create movie title
-                    var movieTitleEl = document.createElement("h3");
-                    movieTitleEl.className = "card-header title is-5 p-2 bg has-text-white";
-                    movieTitleEl.innerHTML = movieTitle[i];
-                    movieDivEl.appendChild(movieTitleEl);
-                    // create content div
-                    var movieContentDiv = document.createElement("div");
-                    movieContentDiv.className = "card-content has-text-centered";
-                    movieDivEl.appendChild(movieContentDiv);
-                    // add movie poster
-                    var movieImageDiv = document.createElement("img");
-                    movieImageDiv.className = "card-image has-text-centered m-3";
-                    movieImageDiv.src = moviePoster[i];
-                    movieContentDiv.appendChild(movieImageDiv);
-                    // add movie date
-                    var movieDateEl = document.createElement("h4");
-                    movieDateEl.className = "card-content has-text-centered p-2";
-                    movieDateEl.textContent = "Release date: " + movieDate[i];
-                    movieContentDiv.appendChild(movieDateEl);
-                    // add movie description       
-                    var movieDescriptionEl = document.createElement("p");
-                    movieDescriptionEl.className = "card-content has-text-justified";
-                    movieDescriptionEl.textContent = "Plot: " + moviePlot[i];
-                    movieContentDiv.appendChild(movieDescriptionEl);
-                    
-                };
-
+                // loop through movie id's
+                for (i = 0; i < movieID.length; i++) {
+                    //api with added parameters for id which will give us data on THE specific movie
+                    var movieIDUrl = "https://www.omdbapi.com/?i=" + movieID[i] + "&apikey=5bdbab43&";
+                    fetch(movieIDUrl).then(function (response2) {
+                        if (response2.ok) {
+                            response2.json().then(function (data2) {
+                                //assign current plot to array
+                                moviePlot[i] = data2.Plot;
+                                //log to make sure plot is saved
+                                console.log("Plot: " + moviePlot[i]);
+                                // assign current movie title to array
+                                movieTitle[i] = data2.Title;
+                                console.log(data2.Title);
+                                // create card div
+                                var movieDivEl = document.createElement("div");
+                                movieDivEl.className = "card m-2";
+                                movieResultsDiv.appendChild(movieDivEl);
+                                // create movie title
+                                var movieTitleEl = document.createElement("h3");
+                                movieTitleEl.className = "card-header title is-5 p-2 bg has-text-white";
+                                movieTitleEl.innerHTML = movieTitle[i];
+                                movieDivEl.appendChild(movieTitleEl);
+                                // get movie poster
+                                moviePoster[i] = data2.Poster;
+                                // create content div
+                                var movieContentDiv = document.createElement("div");
+                                movieContentDiv.className = "card-content has-text-centered";
+                                movieDivEl.appendChild(movieContentDiv);
+                                // add movie poster
+                                var movieImageDiv = document.createElement("img");
+                                movieImageDiv.className = "card-image has-text-centered m-3";
+                                movieImageDiv.src = moviePoster[i];
+                                movieContentDiv.appendChild(movieImageDiv);
+                                // get movie date
+                                movieDate[i] = data2.Released;
+                                // add movie date
+                                var movieDateEl = document.createElement("h4");
+                                movieDateEl.className = "card-content has-text-centered p-2";
+                                movieDateEl.textContent = "Release date: " + movieDate[i];
+                                movieContentDiv.appendChild(movieDateEl);
+                                // add movie description
+                                var movieDescriptionEl = document.createElement("p");
+                                movieDescriptionEl.className = "card-content has-text-justified";
+                                movieDescriptionEl.textContent = "Plot: " + moviePlot[i];
+                                movieContentDiv.appendChild(movieDescriptionEl);
+                                console.log(moviePlot[i]);
+                            });
+                        }
+                    });
+                }
             });
         } else {
             alert("Error getting api response");
         };
     });
-};
+}
 // SUBMIT CITY EVENT LISTENER
 formEl.addEventListener("submit", formSubmitHandler);
-
-//log titles, images, descriptions
