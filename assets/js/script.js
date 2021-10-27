@@ -131,7 +131,6 @@ var getBook = function () {
                     bookDescriptionEl.className = "card-content has-text-justified";
                     bookDescriptionEl.textContent = bookDesc[i];
                     bookContentDiv.appendChild(bookDescriptionEl);
-
                 };
 
             });
