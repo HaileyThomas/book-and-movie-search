@@ -2,6 +2,8 @@
 var formEl = document.querySelector("#hero-form");
 var inputEl = document.querySelector("#title");
 var resultsContainer = document.getElementById("results-container");
+var historyContainer = document.getElementById("search-history");
+var historyDiv;
 var search;
 //movie data
 var movieContainer;
@@ -16,6 +18,9 @@ var bookTitle = [];
 var bookDate = [];
 var bookDesc = [];
 var bookThumbnail = [];
+//local storage history
+var historyEl = JSON.parse(window.localStorage.getItem("searchHistory")) || [];
+var searchCount = 0;
 
 //we use arrays for data because there are 5 items we want to store specific data for
 //ex. 5 book titles
@@ -46,13 +51,65 @@ var formSubmitHandler = function (event) {
     };
     // get value from input element
     search = inputEl.value.trim();
+
+    //history array
+    console.log(historyEl);
+    historyEl.push(search);
+    //only allow up to 5 searches
+    historyEl.splice(10);
+    //store to local storage
+    localStorage.setItem("searchHistory", JSON.stringify(historyEl));
+    console.log(localStorage.getItem("searchHistory", JSON.stringify(historyEl)));
+    // run display history function
+    updateHistory();
     // run get city function
     getBook();
     getMovie();
 };
 
-// GET BOOK
+// UPDATE HISTORY FUNCTION
+var updateHistory = function () {
+    historyDiv.remove();
+    displayHistory();
+}
 
+// DISPLAY HISTORY FUNCTION
+var displayHistory = function () {
+    console.log(historyEl);
+    // create div for buttons
+    historyDiv = document.createElement("div");
+    historyDiv.className = "has-text-centered buttons are-small";
+    historyContainer.appendChild(historyDiv);
+    // loop over history results
+    for (i = 0; i < historyEl.length; i++) {
+        // create history button
+        var historyBtn = document.createElement("button");
+        historyBtn.setAttribute("id", "history-btn");
+        historyBtn.className = "button is-primary is-outline m-3";
+        historyBtn.innerHTML = historyEl[i];
+        historyDiv.appendChild(historyBtn);
+        // create click function for buttons
+        $("button").click(function () {
+            console.log(this);
+            // update search variable to button text
+            search = $(this)[0].innerText;
+            // check to see if book container is up
+            if (bookContainer) {
+                // remove container
+                bookContainer.remove();
+            };
+            // check to see if movie container is up
+            if (movieContainer) {
+                movieContainer.remove();
+            };
+            // run get book and get movie functions
+            getBook();
+            getMovie();
+        })
+    }
+};
+
+// GET BOOK FUNCTION
 var getBook = function () {
     var url = "https://www.googleapis.com/books/v1/volumes?q=" + search + "&key=AIzaSyDHFrhaSZyG8xtzgAEnpoZ8Rh5zLZ-D0RU";
 
@@ -229,5 +286,9 @@ var getMovie = function () {
         };
     });
 }
+
+// CALL DISPLAY HISTORY FUNCTION
+displayHistory();
+
 // SUBMIT CITY EVENT LISTENER
 formEl.addEventListener("submit", formSubmitHandler);
