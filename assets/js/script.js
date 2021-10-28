@@ -60,18 +60,10 @@ var formSubmitHandler = function (event) {
     //store to local storage
     localStorage.setItem("searchHistory", JSON.stringify(historyEl));
     console.log(localStorage.getItem("searchHistory", JSON.stringify(historyEl)));
-    // run display history function
-    updateHistory();
     // run get city function
     getBook();
     getMovie();
 };
-
-// UPDATE HISTORY FUNCTION
-var updateHistory = function () {
-    historyDiv.remove();
-    displayHistory();
-}
 
 // DISPLAY HISTORY FUNCTION
 var displayHistory = function () {
@@ -89,7 +81,7 @@ var displayHistory = function () {
         historyBtn.innerHTML = historyEl[i];
         historyDiv.appendChild(historyBtn);
         // create click function for buttons
-        $("button").click(function () {
+        $("#history-btn").click(function () {
             console.log(this);
             // update search variable to button text
             search = $(this)[0].innerText;
