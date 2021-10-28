@@ -80,21 +80,28 @@ var displayHistory = function () {
         historyBtn.className = "button is-primary is-outline m-3";
         historyBtn.innerHTML = historyEl[i];
         historyDiv.appendChild(historyBtn);
-        // create click function for buttons
-        $("#history-btn").click(function () {
-            console.log(this);
-            // update search variable to button text
-            search = $(this)[0].innerText;
-            // check to see if book container is up
+        historyBtn.addEventListener("click", function (event) {
+            search = (this.innerText);
+            // check to see if there is already book results
             if (bookContainer) {
-                // remove container
-                bookContainer.remove();
+                // give name to state of element
+                var state1 = bookContainer.getAttribute("data-state");
+                // check to see if it is visible on the page
+                if (state1 === "visible") {
+                    // remove div
+                    bookContainer.remove();
+                }
             };
-            // check to see if movie container is up
+            // check to see if there is already movie results
             if (movieContainer) {
-                movieContainer.remove();
+                // give name to state of element
+                var state2 = movieContainer.getAttribute("data-state");
+                // check to see if it is visible on the page
+                if (state2 === "visible") {
+                    // remove div
+                    movieContainer.remove();
+                }
             };
-            // run get book and get movie functions
             getBook();
             getMovie();
         })
