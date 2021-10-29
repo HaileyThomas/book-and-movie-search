@@ -63,6 +63,8 @@ var formSubmitHandler = function (event) {
     // run get city function
     getBook();
     getMovie();
+    //clear search bar after submit
+    document.getElementById("title").value = "";
 };
 
 // DISPLAY HISTORY FUNCTION
