@@ -17,6 +17,9 @@ WHEN I CLICK the history button, I can see previously searched titles
 ## Website
 https://arios10.github.io/book-and-movie-search/
 
+## Screenshot
+![IIABOM](./assets/images/screenshot.png)
+
 ## Contribution
 Made by Hailey Thomas & Angel Rios
 
